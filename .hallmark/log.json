@@ -1,0 +1,15 @@
+[
+  {
+    "date": "2026-10-25",
+    "scope": "app",
+    "theme": "dose",
+    "deal": "1/3, calm-minimalist-mobile-chess-5147·6a1119d3·2026-10-24·r0",
+    "screen": "Board-led interactive piece safety lesson",
+    "signature": "A real chessboard beside patient, graduated teaching feedback",
+    "material": "Curated chess positions, actual legal moves, learner evidence; no invented metrics or decorative imagery",
+    "adaptations": ["local system sans for zero remote font dependency", "no theme decoration or ambient motion", "instructions precede board on mobile"],
+    "review": "in-thread; app hierarchy, states, density and responsive screenshots inspected; zero blocking design findings",
+    "sweep": { "fail": 0, "reflex": 0, "warnings": 3 },
+    "render": "Playwright screenshot inspection; optional Puppeteer tier unavailable"
+  }
+]

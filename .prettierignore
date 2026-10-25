@@ -1,0 +1,8 @@
+node_modules
+.next
+.next-phase1b
+pnpm-lock.yaml
+test-results
+playwright-report
+artifacts
+.hallmark

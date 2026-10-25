@@ -1,0 +1,12 @@
+{
+  "scanned": "2026-10-25",
+  "findings": {
+    "existingProject": false,
+    "fonts": "No existing fonts; local system sans-serif selected",
+    "palette": "No existing palette; Dose green and warm paper",
+    "motion": "No decorative motion; board animations disabled",
+    "framework": "Next.js App Router, React 19, Tailwind 4"
+  },
+  "preserve": ["read-only environment directories"],
+  "introduce": ["chessboard lesson workbench", "shared tokens", "responsive instructions", "feedback and retry states"]
+}
