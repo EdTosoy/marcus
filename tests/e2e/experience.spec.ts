@@ -9,9 +9,13 @@ test("approved icon bytes, manifest, and accessible viewport metadata are served
   request,
 }) => {
   await page.goto("/");
+  await expect(page).toHaveTitle("Marcus | Is Your Piece Safe?");
+  await expect(
+    page.locator('meta[name="apple-mobile-web-app-title"]'),
+  ).toHaveAttribute("content", "Marcus");
   await expect(page.locator('meta[name="application-name"]')).toHaveAttribute(
     "content",
-    "Quiet Chess",
+    "Marcus",
   );
   await expect(page.locator('meta[name="viewport"]')).toHaveAttribute(
     "content",
@@ -26,7 +30,8 @@ test("approved icon bytes, manifest, and accessible viewport metadata are served
   const response = await request.get(manifestUrl!);
   expect(response.ok()).toBe(true);
   const manifest = await response.json();
-  expect(manifest.name).toBe("Quiet Chess");
+  expect(manifest.name).toBe("Marcus");
+  expect(manifest.short_name).toBe("Marcus");
   expect(manifest.icons).toHaveLength(2);
   expect(
     manifest.icons.every((icon: { purpose: string }) => icon.purpose === "any"),
@@ -50,9 +55,9 @@ test("approved icon bytes, manifest, and accessible viewport metadata are served
     "sizes",
     "180x180",
   );
-  await expect(
-    page.getByRole("link", { name: "Quiet Chess home" }),
-  ).toBeVisible();
+  const home = page.getByRole("link", { name: "Marcus home" });
+  await expect(home).toBeVisible();
+  await expect(home).toHaveText("Marcus");
 });
 
 test("theme follows the system, overrides persist, and mobile navigation manages focus", async ({
@@ -259,6 +264,7 @@ test("core routes fit 320px through desktop in light and dark without loading an
         "/board",
       ]) {
         await page.goto(path);
+        await expect(page).toHaveTitle(/Marcus/);
         await expect(page.locator("main")).toBeVisible();
         expect(
           await page.evaluate(

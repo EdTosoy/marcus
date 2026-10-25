@@ -5,9 +5,15 @@
   --color-accent-deep: #08392c;
   --color-muted: #4e6355;
   --board-focus-ring: #174c32;
+  --brand-surface: transparent;
+  --brand-blend: multiply;
+  --brand-filter: brightness(1.03);
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
+  --brand-surface: #fff;
+  --brand-blend: normal;
+  --brand-filter: none;
   --color-paper: #101d17;
   --color-paper-2: #192b21;
   --color-paper-3: #22372a;
@@ -28,6 +34,9 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
+    --brand-surface: #fff;
+    --brand-blend: normal;
+    --brand-filter: none;
     --color-paper: #101d17;
     --color-paper-2: #192b21;
     --color-paper-3: #22372a;
@@ -82,14 +91,17 @@ body {
 }
 .brand-symbol {
   display: inline-flex;
-  background: #fff;
+  background: var(--brand-surface);
   border-radius: 10px;
   overflow: hidden;
   width: 44px;
   height: 44px;
   flex: none;
 }
+/* Normalize the opaque near-white canvas before blending into the light header. */
 .brand-symbol img {
+  mix-blend-mode: var(--brand-blend);
+  filter: var(--brand-filter);
   width: 44px;
   height: 44px;
   display: block;

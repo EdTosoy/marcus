@@ -1,4 +1,4 @@
-# Quiet Chess
+# Marcus
 
 A local, mobile-first chess learning application. **“Is Your Piece Safe?”** provides a visual explanation, five practice positions, and a transfer assessment. Phase 1B adds **Learning practice** at `/learn`: a five-decision baseline, guided practice across five skills, reserved independent checks, delayed review, and an evidence-focused progress view.
 

@@ -29,7 +29,7 @@ export function SiteHeader() {
         <Link
           href="/"
           className="wordmark"
-          aria-label="Quiet Chess home"
+          aria-label="Marcus home"
           onClick={() => setOpen(false)}
         >
           <span className="brand-symbol">
@@ -42,7 +42,7 @@ export function SiteHeader() {
               unoptimized
             />
           </span>
-          <span>Quiet Chess</span>
+          <span>Marcus</span>
         </Link>
         <div className="header-actions">
           <ThemeControl />

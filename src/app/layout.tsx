@@ -5,14 +5,14 @@ import "./globals.css";
 import "./experience.css";
 
 export const metadata: Metadata = {
-  title: "Quiet Chess | Is Your Piece Safe?",
+  title: "Marcus | Is Your Piece Safe?",
   description:
     "A patient, interactive chess lesson. Learn to notice threats, check your moves, and keep your pieces safe.",
-  applicationName: "Quiet Chess",
+  applicationName: "Marcus",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
-    title: "Quiet Chess",
+    title: "Marcus",
     statusBarStyle: "default",
   },
   icons: {

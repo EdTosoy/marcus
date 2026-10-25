@@ -1,6 +1,6 @@
 # Approved brand integration
 
-Phase 2C uses the supplied knight above an open book, without altering the artwork or adding text to the symbol. The current application name, **Quiet Chess**, remains unchanged. Its adjacent navigation label is separate HTML text.
+Phase 2C uses the supplied knight above an open book, without altering the artwork or adding text to the symbol. The application is named **Marcus**, following the owner’s naming instruction on 2026-10-26. Its adjacent navigation label is separate HTML text.
 
 ## Provenance and preservation
 
@@ -17,14 +17,18 @@ This actual pack includes 192/256/512px icons, 16/32/48px favicons, an ICO and a
 | Apple home screen                 | `/apple-touch-icon.png`                                                          | `assets/apple-touch-icon.png` |
 | Web manifest / Android references | `/brand/icon-192.png`, `/brand/icon-512.png`                                     | Same filenames in `assets/`   |
 
-Browser tests fetch every served file and compare its bytes with the supplied source. The navigation image has fixed dimensions, decorative empty alt text beside the accessible home-link label, and a white badge in both themes. The 192px source is 32,440 bytes and serves directly; the 218,859-byte 512px icon is referenced for installation rather than downloaded for navigation. The large original is never requested by the UI. No image dependency was added.
+Browser tests fetch every served file and compare its bytes with the supplied source. The navigation image has fixed dimensions, decorative empty alt text beside the accessible home-link label, and a transparent wrapper in light mode. Light-mode brightness normalization and multiply blending remove the visible near-white canvas against the light header; dark mode retains the white badge. The 192px source is 32,440 bytes and serves directly; the 218,859-byte 512px icon is referenced for installation rather than downloaded for navigation. The large original is never requested by the UI. No image dependency was added.
 
 `src/app/layout.tsx` supplies favicon, Apple, application-name, viewport and theme metadata. `src/app/manifest.ts` supplies `/manifest.webmanifest`, matching application identity, scope, standalone display and **purpose `any`** icons. There is no maskable-icon claim, service worker, offline support or verified installation claim. Manifest configuration alone does not establish installability on every browser.
 
 ## Themes and inspection
 
-The existing paper/green palette is refined, with dark tokens for page, feedback, controls and text. Board square/piece colors remain consistent across themes. System/light/dark selection persists under `quiet-chess:theme:v1`; unavailable storage falls back to an in-page choice. A small pre-paint initializer avoids a stored-theme flash; browser-color metadata follows the selected effective theme. The source artwork remains opaque on its deliberate light badge.
+The existing paper/green palette is refined, with dark tokens for page, feedback, controls and text. Board square/piece colors remain consistent across themes. System/light/dark selection persists under `quiet-chess:theme:v1`; unavailable storage falls back to an in-page choice. A small pre-paint initializer avoids a stored-theme flash; browser-color metadata follows the selected effective theme. The source artwork remains opaque and unchanged. Light mode blends its white canvas into the header; dark mode retains the deliberate light badge.
 
 The supplied 16/32/48/192px PNGs were displayed unchanged against light and dark backgrounds in `artifacts/phase2c/before-verified/approved-icon-sizes.png`. At 16px fine book detail is limited; the larger sizes preserve the recognizable silhouette. No claim of transparent-edge quality is appropriate for opaque files. Physical home-screen cropping and Safari/Android installation remain pending under the device protocol.
 
 Stitch is excluded at the user's request. No Stitch design was imported or treated as approved.
+
+## Application-name update — 2026-10-26
+
+The navigation label and accessible home link, browser/page titles, application and Apple metadata, web manifest name/short name, and package identity now use Marcus. Earlier Phase 2C verification records and screenshots retain their historical name. Existing `quiet-chess:learning:v1` and `quiet-chess:theme:v1` storage keys are deliberately retained so the name change does not reset saved progress or preferences. The approved symbol is unchanged.
