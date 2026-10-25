@@ -60,7 +60,11 @@ export function immediateCaptures(exercise: Exercise) {
   const target = exercise.answer.candidate.to;
   return result.game
     .moves({ verbose: true })
-    .filter((move) => move.to === target && move.isCapture());
+    .filter(
+      (move) =>
+        (move.isCapture() && move.to === target) ||
+        (move.isEnPassant() && `${move.to[0]}${move.from[1]}` === target),
+    );
 }
 
 export function validateResponse(

@@ -8,6 +8,10 @@ export default defineConfig([
   globalIgnores([
     ".next/**",
     ".next-phase1b/**",
+    ".next-phase2a/**",
+    ".next-phase2b/**",
+    ".next-phase2c/**",
+    "public/engine/**",
     "artifacts/**",
     "test-results/**",
     "playwright-report/**",

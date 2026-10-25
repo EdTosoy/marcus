@@ -67,7 +67,7 @@ const concepts: Record<
       "A friendly pawn defends on its capture diagonal. A line blocked before the target does not defend it.",
     ],
     correct:
-      "Attacks and defenders are separate facts. This is a geometric description, not an exchange evaluation.",
+      "Attacks and defenders are separate facts. These are attack paths, not a calculation of who wins a trade.",
     incorrect:
       "Check each side separately. Having a defender does not cancel an attack. Revisit the listed paths before retrying.",
   },

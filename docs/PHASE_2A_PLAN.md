@@ -10,3 +10,5 @@ Preserve the existing lessons, adaptive assessments, board adapter, and local ke
 6. Prepare a lightweight 5–8 beginner pilot protocol and record actual verification and limitations.
 
 Acceptance: legal complete games as either color, one responsive lazy worker, completed-game replay and focused retries, honest deterministic explanations, separate gameplay evidence, targeted guided practice, and passing repository checks. No commits, deployment, public distribution, or infrastructure changes are authorized.
+
+Implementation and local verification are complete. The final Webpack production build, 150 unit tests, 28 desktop/mobile browser scenarios, lint, typecheck and formatting pass. See [verification and manual test instructions](PHASE_2A_VERIFICATION.md). Human educational validation, physical-device measurement and public-distribution packaging remain pending; no effectiveness or deployment claim is made.

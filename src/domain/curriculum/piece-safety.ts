@@ -24,7 +24,7 @@ export const pieceSafetyLesson = {
     target: "d4",
     attacker: "d8",
     explanation:
-      "A piece is attacked when an opponent’s piece could capture it. The black rook on d8 has a clear line to the white bishop on d4. If White ignores the threat, Black can capture the bishop next turn.",
+      "A piece is attacked when an opponent’s capture pattern reaches its square. Here, the black rook on d8 has a clear line to the white bishop on d4. If White ignores this threat, Black can capture the bishop next turn.",
   },
   exercises: [
     {

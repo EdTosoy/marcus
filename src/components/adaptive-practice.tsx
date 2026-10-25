@@ -5,7 +5,11 @@ import { useRef, useState } from "react";
 import { Chess } from "chess.js";
 import { foundationExercises as bank } from "@/domain/curriculum/foundations";
 import { skills } from "@/domain/adaptive/skills";
-import { learnerModel, stateLabels } from "@/domain/adaptive/model";
+import {
+  learnerModel,
+  prerequisitesReady,
+  stateLabels,
+} from "@/domain/adaptive/model";
 import { recommend } from "@/domain/adaptive/recommend";
 import {
   learnerFeedback,
@@ -43,7 +47,11 @@ const date = (at: number) =>
     year: "numeric",
   });
 
-export function AdaptivePractice() {
+export function AdaptivePractice({
+  requestedExerciseId,
+}: {
+  requestedExerciseId?: string;
+}) {
   const { data, ready, notice, now, update } = useAdaptiveProgress();
   const [view, setView] = useState<"practice" | "progress">("practice");
   const [inputNotice, setInputNotice] = useState("");
@@ -65,6 +73,9 @@ export function AdaptivePractice() {
   const assessmentOpen = Boolean(exercise && !guided);
   const sealed = !baselineDone || assessmentOpen;
   const model = learnerModel(data, bank, now);
+  const requested = bank.find(
+    (item) => item.id === requestedExerciseId && item.role === "guided",
+  );
   const recommendation = recommend({ ...data, activeRunId: null }, bank, now);
   const firstExposure =
     exercise &&
@@ -89,6 +100,7 @@ export function AdaptivePractice() {
     update((current, at) => learningTransition(current, event, bank, at));
     if (
       event.type === "start" ||
+      event.type === "start-guided" ||
       event.type === "next" ||
       event.type === "retry"
     )
@@ -143,6 +155,35 @@ export function AdaptivePractice() {
         <p className="storage-notice" role="status">
           {notice}
         </p>
+      )}
+      {ready && requested && !run && view === "practice" && (
+        <section
+          className="practice-recommendation"
+          aria-label="Practice from your game"
+        >
+          <h2>Bring the idea from your game.</h2>
+          <p>
+            A game review recommended {requested.title.toLowerCase()}. This is
+            guided practice; game observations have not changed your assessment
+            results.
+          </p>
+          {baselineDone && prerequisitesReady(requested.skillId, model) ? (
+            <button
+              className="button primary"
+              disabled={futureClock}
+              onClick={() =>
+                send({ type: "start-guided", exerciseId: requested.id })
+              }
+            >
+              Start practice from game
+            </button>
+          ) : (
+            <p>
+              Complete the baseline and this skill’s prerequisites first. Your
+              current learning sequence is available below.
+            </p>
+          )}
+        </section>
       )}
       {futureClock && (
         <p className="storage-notice" role="status">

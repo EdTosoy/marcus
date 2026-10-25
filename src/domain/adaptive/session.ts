@@ -1,11 +1,18 @@
 import { validateResponse } from "../learning/validation";
 import type { StudentResponse } from "../learning/types";
 import { recommend } from "./recommend";
-import { defaultModelConfig, type ModelConfig } from "./model";
+import {
+  defaultModelConfig,
+  learnerModel,
+  prerequisitesReady,
+  type ModelConfig,
+} from "./model";
+import { skills } from "./skills";
 import type { FoundationExercise, LearningData, Reflection } from "./types";
 
 export type LearningEvent =
   | { type: "start" }
+  | { type: "start-guided"; exerciseId: string }
   | { type: "hint" }
   | { type: "retry" }
   | { type: "next" }
@@ -30,10 +37,36 @@ export function learningTransition(
       )
   )
     return data;
-  if (event.type === "start") {
-    if (data.activeRunId) return data;
-    const { exercise } = recommend(data, bank, now, config);
+  if (event.type === "start" || event.type === "start-guided") {
+    if (data.activeRunId || data.runs.length >= 1000) return data;
+    const exercise =
+      event.type === "start"
+        ? recommend(data, bank, now, config).exercise
+        : bank.find(
+            (item) => item.id === event.exerciseId && item.role === "guided",
+          );
     if (!exercise) return data;
+    if (
+      event.type === "start-guided" &&
+      (!skills.every((skill) =>
+        data.runs.some(
+          (run) =>
+            run.finishedAt !== null &&
+            bank.some(
+              (item) =>
+                item.id === run.exerciseId &&
+                item.skillId === skill.id &&
+                item.role === "diagnostic",
+            ),
+        ),
+      ) ||
+        !prerequisitesReady(
+          exercise.skillId,
+          learnerModel(data, bank, now, config),
+          config,
+        ))
+    )
+      return data;
     const run = {
       id: `run-${data.runs.length + 1}`,
       exerciseId: exercise.id,

@@ -8,8 +8,8 @@
     "node": ">=24 <25"
   },
   "scripts": {
-    "dev": "next dev --hostname 127.0.0.1",
-    "build": "next build",
+    "dev": "node scripts/prepare-engine.mjs && next dev --hostname 127.0.0.1",
+    "build": "node scripts/prepare-engine.mjs && next build",
     "start": "next start --hostname 127.0.0.1",
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write .",
@@ -17,7 +17,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "engine:prepare": "node scripts/prepare-engine.mjs"
   },
   "dependencies": {
     "chess.js": "1.4.0",

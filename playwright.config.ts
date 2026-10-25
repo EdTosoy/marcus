@@ -31,6 +31,18 @@ export default defineConfig({
       name: "mobile",
       use: { ...devices["iPhone 13"], defaultBrowserType: "chromium" },
     },
+    ...(process.env.MARCUS_EXTRA_BROWSERS === "1"
+      ? [
+          {
+            name: "firefox",
+            use: { ...devices["Desktop Firefox"], launchOptions: {} },
+          },
+          {
+            name: "webkit",
+            use: { ...devices["Desktop Safari"], launchOptions: {} },
+          },
+        ]
+      : []),
   ],
   webServer: {
     env: { NEXT_DIST_DIR: process.env.NEXT_DIST_DIR ?? ".next" },

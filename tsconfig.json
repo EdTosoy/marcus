@@ -30,7 +30,13 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     ".next-phase1b/types/**/*.ts",
-    ".next-phase1b/dev/types/**/*.ts"
+    ".next-phase1b/dev/types/**/*.ts",
+    ".next-phase2a/types/**/*.ts",
+    ".next-phase2a/dev/types/**/*.ts",
+    ".next-phase2b/types/**/*.ts",
+    ".next-phase2b/dev/types/**/*.ts",
+    ".next-phase2c/types/**/*.ts",
+    ".next-phase2c/dev/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

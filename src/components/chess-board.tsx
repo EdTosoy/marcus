@@ -15,6 +15,7 @@ type Props = {
   onMove?: (move: MoveInput) => void;
   onSquare?: (square: Square) => void;
   locked?: boolean;
+  lockedMessage?: string;
   focusSquare?: Square;
   arrow?: { from: Square; to: Square };
   orientation?: "white" | "black";
@@ -25,6 +26,7 @@ export function ChessBoard({
   onMove,
   onSquare,
   locked = false,
+  lockedMessage = "Position paused. Read the explanation to continue.",
   focusSquare,
   arrow,
   orientation = "white",
@@ -208,7 +210,7 @@ export function ChessBoard({
       )}
       <p id={`${id}-help`} className="board-help">
         {locked
-          ? "Position paused. Read the explanation to continue."
+          ? lockedMessage
           : onSquare
             ? "Tap a piece to answer."
             : "Tap a piece, then a destination. Or drag to move."}{" "}

@@ -70,6 +70,8 @@ First-try success does not become independent after repeated retries. Completion
 
 ## Phase 1B adaptive practice and current limits
 
+Phase 2A now connects complete games to these skills through a separate evidence source. Gameplay review observes legal immediate captures and geometric defenders, records familiar retries and assistance, and can recommend existing guided practice. It never imports game moves or review success into mastery assessments. See [Learning transfer](LEARNING_TRANSFER.md) and the prepared, unexecuted [beginner pilot protocol](BEGINNER_PILOT_PROTOCOL.md).
+
 The original lesson retains the behavior above. `/learn` adds five prerequisite-linked skills: recognize attacks, distinguish attacks and defenders, recognize hanging pieces, check destination safety, and anticipate an immediate capture. Each skill has one diagnostic, two guided positions, two transfer positions, and two delayed positions. Positions vary side to move, piece patterns, and two authored difficulty levels. Automated checks validate every FEN, authored example, attacker/defender claim, legal capture reply, and all accepted alternatives. Independent educator review remains pending.
 
 The baseline samples all five skills before teaching, regardless of instructional prerequisites. Independent roles permit one response, including “not sure”, without hints, retries, solutions, or detailed correction. Progress and export stay hidden during the baseline and active checks. Guided practice provides conceptual hints and feedback; after an incorrect response, a learner must record a reflection before retrying. This records a self-report, not proof of reasoning or a diagnosis.

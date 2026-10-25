@@ -946,3 +946,183 @@ textarea {
     text-align: left;
   }
 }
+
+/* Phase 2A: retain the lesson's board, type, spacing, and restrained controls. */
+.gameplay-main {
+  padding-block: var(--space-xl);
+}
+.gameplay-main > * + * {
+  margin-top: var(--space-xl);
+}
+.game-workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: var(--space-2xl);
+  align-items: start;
+}
+.game-workbench > section {
+  min-width: 0;
+}
+.game-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-lg);
+}
+.game-sidebar h2,
+.game-setup h2,
+.review-decisions h2 {
+  font-size: 26px;
+}
+.game-setup {
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-lg);
+}
+.game-setup fieldset {
+  width: 100%;
+}
+.game-select,
+.review-game-picker label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  max-width: 100%;
+}
+.gameplay-main select {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-input-border);
+  border-radius: var(--radius-input);
+  background: var(--color-paper);
+  max-width: 100%;
+}
+.gameplay-main input[type="radio"] {
+  accent-color: var(--color-accent);
+}
+.completed-games li {
+  margin-block: var(--space-sm);
+}
+.completed-games li > * {
+  margin-right: var(--space-lg);
+}
+.completed-games h2 {
+  font-size: 26px;
+}
+.review-game-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+  align-items: end;
+}
+.focused-review .instruction {
+  margin-block: var(--space-md);
+}
+.focused-review .board-interaction {
+  margin-block: var(--space-md);
+}
+.review-decisions > p {
+  margin-block: var(--space-md);
+}
+.review-explanation,
+.practice-recommendation {
+  display: grid;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--color-paper-2);
+  border-radius: var(--radius-card);
+}
+.practice-recommendation h2 {
+  font-size: 24px;
+}
+.game-replay > summary {
+  cursor: pointer;
+  min-height: 44px;
+  font-weight: 700;
+}
+.replay-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-xl);
+}
+.replay-moves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding: 0;
+  list-style: none;
+}
+.replay-moves button[aria-current="step"] {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+.header-inner {
+  flex-wrap: wrap;
+}
+@media (max-width: 900px) {
+  .header-note {
+    display: none;
+  }
+  nav {
+    margin-left: 0;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+}
+@media (max-width: 700px) {
+  .game-workbench,
+  .replay-content {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xl);
+  }
+  .header-inner {
+    padding-block: var(--space-md);
+    gap: var(--space-sm);
+  }
+  nav {
+    width: 100%;
+    justify-content: flex-start;
+    column-gap: var(--space-lg);
+    row-gap: 0;
+  }
+  .gameplay-main .lesson-heading {
+    flex-wrap: wrap;
+  }
+  .game-sidebar {
+    gap: var(--space-md);
+  }
+  .gameplay-main .board-controls {
+    flex-wrap: wrap;
+  }
+}
+
+.timing-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-md);
+  padding-block: var(--space-sm);
+  font-size: var(--text-sm);
+}
+.evaluation-metrics {
+  display: grid;
+  gap: var(--space-md);
+  margin-block: var(--space-lg);
+}
+.evaluation-metrics > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  border-bottom: 1px solid var(--color-rule);
+  padding-bottom: var(--space-sm);
+}
+.evaluation-metrics dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+.gameplay-main .evidence-view > * + * {
+  margin-top: var(--space-lg);
+}
