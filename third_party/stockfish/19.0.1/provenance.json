@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "version": "19.0.1",
+  "variant": "lite-single",
+  "package": {
+    "name": "stockfish",
+    "version": "19.0.1",
+    "url": "https://registry.npmjs.org/stockfish/-/stockfish-19.0.1.tgz",
+    "integrity": "sha512-bTwsO4e9HAwPBKls1+szcfibmaWRNzTF20rQE/XPdB3LOSoT6XTZDr1zYwriwSRRFT5MkvqrglPmJrKEVXGnyQ=="
+  },
+  "upstream": {
+    "repository": "https://github.com/nmrugg/stockfish.js",
+    "tag": "v19.0.1",
+    "tagObject": "8d9ca57043594a8fa6ae0b73fb685d9105bf51df",
+    "commit": "0d5dd7944f88c817c07a26bc4fb1905d5f9c46d6",
+    "tagSignature": "unsigned",
+    "releaseId": 408947742,
+    "releaseUrl": "https://github.com/nmrugg/stockfish.js/releases/tag/v19.0.1"
+  },
+  "binaries": {
+    "stockfish-19-lite-single.js": {
+      "bytes": 28230,
+      "sha256": "ccb130d7ff29408531c47d859a49f91d59d4f482d05a53eb1a3231a4f624c91a"
+    },
+    "stockfish-19-lite-single.wasm": {
+      "bytes": 1845971,
+      "sha256": "ee4f115bdb2d32cadf96cada104a05b5ec257d7ad6f57582190b49bc71f096de"
+    }
+  },
+  "network": {
+    "name": "nn-61e7af4bb97d.nnue",
+    "author": "Chris Bao (sscg13)",
+    "bytes": 1166381,
+    "sha256": "61e7af4bb97d51eeeb25d322916f86513b5cd3a827ce189c98c6e31946f99e5b",
+    "acquisition": "Recovered without transformation from the pinned WASM initialized data segments",
+    "linearMemoryOffset": 39600,
+    "activeDataSegments": 225
+  },
+  "toolchain": {
+    "emscripten": "6.0.9",
+    "terser": "5.51.2",
+    "linuxAmd64Image": "emscripten/emsdk@sha256:3ba391c5b1554e06f9af0a69652ff20919dff14e771619339dba988bd62574b5",
+    "buildCommand": "node build.js --single-threaded --lite --no-split --strict-em-check"
+  },
+  "patches": [],
+  "sourceArchive": {
+    "file": "stockfish.js-19.0.1-corresponding-source.tar.gz",
+    "publicPath": "/engine/stockfish.js-19.0.1-corresponding-source.tar.gz",
+    "sha256": "7b4c25c19c23e3b82e5c15953299e5a754f84383300a2583991dc629c748683e",
+    "bytes": 1414857
+  },
+  "licenseFile": "COPYING.txt",
+  "legalApproval": "not-granted",
+  "rebuild": {
+    "status": "completed",
+    "emscriptenCommit": "4e4223852a0835923411059a3929907d7df1232e",
+    "node": "24.19.0",
+    "make": "4.3",
+    "networkAccess": "disabled",
+    "outputs": {
+      "stockfish-19-lite-single.js": {
+        "sha256": "ccb130d7ff29408531c47d859a49f91d59d4f482d05a53eb1a3231a4f624c91a",
+        "bytes": 28230,
+        "matchesPublishedRelease": true
+      },
+      "stockfish-19-lite-single.wasm": {
+        "sha256": "ee4f115bdb2d32cadf96cada104a05b5ec257d7ad6f57582190b49bc71f096de",
+        "bytes": 1845971,
+        "matchesPublishedRelease": true
+      }
+    }
+  }
+}

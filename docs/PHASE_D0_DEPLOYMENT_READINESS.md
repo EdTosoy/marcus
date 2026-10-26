@@ -1,5 +1,7 @@
 # Phase D0 — deployment readiness
 
+Current follow-up: [D0.1 verification](PHASE_D0_1_VERIFICATION.md) and [D1 release gates](PHASE_D1_RELEASE_GATES.md). D0.1 supplies and reproduces the exact engine source/network package; application licensing approval remains pending. The September 9, 2026 Vercel change permits All Deployments authentication on Hobby for free; D1 proposes that scope update without applying it in D0.1. Treat the remaining D0 findings below as the historical audit snapshot.
+
 Audit date: 2026-10-26, Asia/Manila. Source baseline: `e61a5636509c38242ad74919b02c85855adb9d1e` on local `main`. The working tree was clean at entry. This report supersedes the current-state statements in the earlier Phase 2C deployment records; those records remain historical evidence.
 
 **Verdict: NO-GO for deployment.** The application passes local production verification and fits a small personal, non-commercial Hobby deployment technically. The existing Stockfish distribution/licensing gate remains unresolved. D1 also requires explicit preview authorization and confirmation of the intended audience and source visibility. Production needs a separate release decision and approval procedure.

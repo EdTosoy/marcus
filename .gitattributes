@@ -1,0 +1,3 @@
+# Preserve reviewed release input bytes and their recorded checksums on checkout.
+third_party/** -text
+scripts/extract-stockfish-network.py text eol=lf

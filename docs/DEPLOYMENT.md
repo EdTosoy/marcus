@@ -1,5 +1,7 @@
 # Marcus deployment runbook
 
+Latest release preparation: [D0.1 source/compliance verification](PHASE_D0_1_VERIFICATION.md) and [D1 release gates](PHASE_D1_RELEASE_GATES.md). The exact engine source package is now prepared and reproducible; application licensing and authorization remain open. D1 also proposes free All Deployments authentication on Hobby, using current September 2026 guidance. No live setting or deployment was changed.
+
 For the current configuration, verification and proposed D1 procedure, see [Phase D0 deployment readiness](PHASE_D0_DEPLOYMENT_READINESS.md). The Phase 2C record below is historical; D0 confirms authenticated deployment-listing access is now working and the existing Vercel project has no Git repository linked. Deployment remains unauthorized and blocked by the recorded distribution/licensing gate.
 
 ## Current release status

@@ -1,0 +1,56 @@
+# Marcus application licensing assessment — approval required
+
+Date: 2026-10-26. **Decision state: C, unresolved pending qualified review and owner approval. Deployment remains NO-GO.** This document assembles technical facts and practical options; it is not a legal opinion or a license grant for Marcus.
+
+## Facts established from source and build
+
+Marcus package metadata is private for npm publication but supplies no application `license` field or top-level license grant. The GitHub repository's public visibility does not make its code freely licensed. Existing third-party component rights remain their own.
+
+`src/engine/types.ts` defines a replaceable `ChessEngine` interface. `UciEngine` accepts a worker-port factory; tests inject mock ports, while a separate integration test runs Stockfish as a Node subprocess. Browser production uses a **classic Web Worker** loaded by URL. Application code imports its own adapter and chess.js; it does not import the Stockfish npm module, C++ source or generated loader into React modules. Only the build preparer and process integration test resolve the npm package.
+
+The protocol sends UCI strings such as `uci`, `isready`, `setoption`, `position` (FEN and move history), and bounded `go` commands. Replies include `uciok`, `readyok`, option descriptions, `info` and `bestmove`. The adapter parses/validates replies and exposes typed engine results. No engine function pointers, WASM memory, internal NNUE state or C++ data structures cross into Marcus. There is no SharedArrayBuffer or direct runtime linking from application modules to the WASM. The worker internally links the upstream generated JavaScript runtime and WASM; that is a covered engine distribution.
+
+Stockfish is copied as two standalone public assets and served together with the Next application in one deployment. Play/review are designed to invoke this specific packaged worker by default, with engine-specific version/preset/option handling. Lessons work without starting the engine, and the adapter can be replaced, but that does not by itself decide copyright-law separateness. Bundle inspection and regression evidence are recorded in [verification](PHASE_D0_1_VERIFICATION.md).
+
+## Applicable GPL language and authoritative guidance
+
+- GPLv3 **section 0** defines propagation, conveying and works based on the Program. Downloading browser JS/WASM conveys copies; this is not merely running server software over a network. A protected preview still has recipients.
+- **Section 1** defines Corresponding Source and covers scripts needed to generate/install/run/modify the work and certain specifically required linked subprograms. It excludes qualifying System Libraries and generally available unmodified general-purpose tools. The engine archive supplies the engine's actual source/input/build material; scope may expand if the application is a combined work.
+- **Sections 4–5** require preservation of applicable notices and address modified works, whole-work licensing and aggregation. Section 5's aggregate provision does not automatically apply merely because files are shipped separately.
+- **Section 6(d)** permits equivalent network source access, including a separate source server with clear adjacent directions, while leaving availability responsibility with the distributor. The source package uses same-origin access instead.
+- **Section 10** protects downstream license rights and prohibits further restrictions. Preview confidentiality or anti-redistribution terms must not override recipients' applicable rights to covered material.
+- The FSF's aggregation FAQ considers both communication mechanism and semantics. A process/message boundary is relevant evidence; sufficiently intimate communication can still support a combined-work interpretation. This guidance is influential licensor guidance, not a binding decision on Marcus under an identified jurisdiction.
+
+Primary authorities: [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html), [FSF aggregation FAQ](https://www.gnu.org/licenses/gpl-faq.en.html#MereAggregation), [FSF source-access FAQ](https://www.gnu.org/licenses/gpl-faq.en.html#SourceAndBinaryOnDifferentSites). The full installed GPL, checked against the exact upstream source, was read locally. Direct GNU webpage retrieval timed out; official indexed FAQ/section excerpts were available. That access limitation is not represented as a new legal interpretation or clearance.
+
+## Decision matrix
+
+| Interpretation                                       | Facts supporting / questioning it                                                                                                                                                                                                                                                                    | Practical obligations and approval                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **A. Separate works distributed as an aggregate**    | Separate worker execution, standard text UCI protocol, no application access to engine internals, independent engine operation, replaceable adapter, and lessons usable independently support this argument. A common deployment and purpose-built engine integration require further consideration. | Preserve engine GPL/source/notices and recipient rights. Preserve other component notices. Marcus may have a separately approved application license if counsel/owner accepts the aggregate analysis and ownership is established. Record the architecture/version and rationale; reassess on tighter coupling or imports. This conclusion has **not** been approved.                                                                                                                                 |
+| **B. Distribution is a combined/derivative work**    | One product/deployment, automatic worker acquisition, engine-dependent play/review features, matching engine option/preset expectations and coordinated control flow could matter. File/worker isolation alone does not settle the test.                                                             | Before distribution, obtain authority from all relevant rightsholders, choose a GPL-compatible whole-work treatment, provide corresponding application source/build material as applicable, preserve notices and permit downstream GPL rights. Review all component/assets for compatibility. Private source hosting must still grant recipients source access. If required rights or acceptable terms cannot be obtained, do not distribute that combination. No automatic relicensing has occurred. |
+| **C. Insufficient certainty for a release decision** | Technical facts are established, but jurisdiction, intended licensing/commercial model, rights ownership and the legal significance of the specific integration have not been decided.                                                                                                               | Keep NO-GO. Ask qualified counsel to decide A/B or identify an acceptable documented distribution arrangement; owner approves the resulting policy and rights inventory. Technical checks can pass while legal approval remains absent. This is the current state.                                                                                                                                                                                                                                    |
+
+Even a deliberate decision to offer Marcus under GPL-compatible terms needs ownership and contributor/asset review; it cannot license rights the owner does not possess. An approval may choose A or B, or retain C. It must not be inferred from an unsigned technical manifest or an assistant's recommendation.
+
+## Specific decision requested
+
+For the exact current release, **does the Next.js application plus its URL-loaded Stockfish worker, exchanging only UCI strings and serving both from the same deployment, qualify as an aggregate of independent works, or does its purpose-built orchestration form a combined work requiring broader GPL licensing/source distribution?** Identify the governing jurisdiction, relevant copyright facts and the intended recipient/contract terms.
+
+Also confirm the sufficiency of the exact serialized NNUE/build inputs and general-tool exclusions, the scoped GPLv3-or-later grant for the new source-recovery helper, and any confidentiality terms for protected pilot recipients. The exact engine was reproduced from the archived inputs; a reproducible binary does not itself decide these legal questions.
+
+The owner must establish application/contributor/brand/content rights and approve the intended application license and business model. No root LICENSE, package license field, copyright assignment, application relicensing or legal-approval marker was added.
+
+## Approval record — intentionally incomplete
+
+| Field                                        | Required record                                                     |
+| -------------------------------------------- | ------------------------------------------------------------------- |
+| Reviewing counsel / qualified reviewer       | Pending                                                             |
+| Release/source fingerprint reviewed          | Pending; bind approval to the final candidate and engine provenance |
+| Jurisdiction and recipients                  | Pending                                                             |
+| Interpretation A / B / C and rationale       | C until an approved record replaces it                              |
+| Application licensing/rights policy          | Pending owner approval                                              |
+| Source-access, retention and recipient terms | Pending approved owner/procedure                                    |
+| Decision date / approver                     | Pending                                                             |
+
+See [D1 release gates](PHASE_D1_RELEASE_GATES.md). These blank fields are approval requirements, not evidence that someone approved them.

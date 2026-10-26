@@ -1,0 +1,440 @@
+{
+  "schemaVersion": 1,
+  "lockfileSha256": "9d28b1d1333c6bb49d90d5f9bdb5203bbf8083580c579a54f036b26076296692",
+  "noticeSha256": "638e2c730102b4bf40437e2ac4fcb6000aa7e5a8fde6c8c52d9301b78d35ac30",
+  "bundledNoticeCount": 132,
+  "packages": [
+    {
+      "name": "@babel/code-frame",
+      "version": "7.29.7",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@babel/compat-data",
+      "version": "7.29.7",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@babel/core",
+      "version": "7.29.7",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@babel/generator",
+      "version": "7.29.8",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@babel/helper-compilation-targets",
+      "version": "7.29.7",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@babel/helper-globals",
+      "version": "7.29.7",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@babel/helper-module-imports",
+      "version": "7.29.7",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@babel/helper-module-transforms",
+      "version": "7.29.7",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@babel/helper-string-parser",
+      "version": "7.29.7",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@babel/helper-validator-identifier",
+      "version": "7.29.7",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@babel/helper-validator-option",
+      "version": "7.29.7",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@babel/helpers",
+      "version": "7.29.10",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@babel/parser",
+      "version": "7.29.9",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@babel/template",
+      "version": "7.29.7",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@babel/traverse",
+      "version": "7.29.10",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@babel/types",
+      "version": "7.29.8",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@dnd-kit/accessibility",
+      "version": "3.1.1",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@dnd-kit/core",
+      "version": "6.3.1",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@dnd-kit/modifiers",
+      "version": "9.0.0",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@dnd-kit/utilities",
+      "version": "3.2.2",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@img/colour",
+      "version": "1.1.0",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@img/sharp-libvips-linux-x64",
+      "version": "1.3.4",
+      "license": "LGPL-3.0-or-later",
+      "noticeOrigin": "package license declaration; no license text supplied"
+    },
+    {
+      "name": "@img/sharp-linux-x64",
+      "version": "0.35.5",
+      "license": "Apache-2.0",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@jridgewell/gen-mapping",
+      "version": "0.3.13",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@jridgewell/remapping",
+      "version": "2.3.5",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@jridgewell/resolve-uri",
+      "version": "3.1.2",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@jridgewell/sourcemap-codec",
+      "version": "1.6.0",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@jridgewell/trace-mapping",
+      "version": "0.3.31",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@next/env",
+      "version": "16.4.3",
+      "license": "MIT",
+      "noticeOrigin": "next@16.4.3 license (same upstream repository)"
+    },
+    {
+      "name": "@next/swc-linux-x64-gnu",
+      "version": "16.4.3",
+      "license": "MIT",
+      "noticeOrigin": "next@16.4.3 license (same upstream repository)"
+    },
+    {
+      "name": "@playwright/test",
+      "version": "1.64.1",
+      "license": "Apache-2.0",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@swc/helpers",
+      "version": "0.5.23",
+      "license": "Apache-2.0",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "@types/node",
+      "version": "24.19.2",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "baseline-browser-mapping",
+      "version": "2.11.31",
+      "license": "Apache-2.0",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "browserslist",
+      "version": "4.29.4",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "caniuse-lite",
+      "version": "1.0.30001819",
+      "license": "CC-BY-4.0",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "chess.js",
+      "version": "1.4.0",
+      "license": "BSD-2-Clause",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "client-only",
+      "version": "0.0.1",
+      "license": "MIT",
+      "noticeOrigin": "package license declaration; no license text supplied"
+    },
+    {
+      "name": "convert-source-map",
+      "version": "2.0.0",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "debug",
+      "version": "4.4.3",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "detect-libc",
+      "version": "2.1.2",
+      "license": "Apache-2.0",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "electron-to-chromium",
+      "version": "1.5.463",
+      "license": "ISC",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "escalade",
+      "version": "3.2.0",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "gensync",
+      "version": "1.0.0-beta.2",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "has-flag",
+      "version": "4.0.0",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "js-tokens",
+      "version": "4.0.0",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "jsesc",
+      "version": "3.1.0",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "json5",
+      "version": "2.2.3",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "lru-cache",
+      "version": "5.1.1",
+      "license": "ISC",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "ms",
+      "version": "2.1.3",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "nanoid",
+      "version": "3.3.20",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "next",
+      "version": "16.4.3",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "node-releases",
+      "version": "2.0.60",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "picocolors",
+      "version": "1.1.1",
+      "license": "ISC",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "playwright",
+      "version": "1.64.1",
+      "license": "Apache-2.0",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "playwright-core",
+      "version": "1.64.1",
+      "license": "Apache-2.0",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "postcss",
+      "version": "8.5.23",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "react",
+      "version": "19.3.1",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "react-chessboard",
+      "version": "5.12.1",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "react-dom",
+      "version": "19.3.1",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "scheduler",
+      "version": "0.28.0",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "semver",
+      "version": "6.3.1",
+      "license": "ISC",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "semver",
+      "version": "7.8.5",
+      "license": "ISC",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "sharp",
+      "version": "0.35.5",
+      "license": "Apache-2.0",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "source-map-js",
+      "version": "1.2.2",
+      "license": "BSD-3-Clause",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "stockfish",
+      "version": "19.0.1",
+      "license": "GPL-3.0",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "styled-jsx",
+      "version": "5.1.6",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "supports-color",
+      "version": "7.2.0",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "tslib",
+      "version": "2.8.1",
+      "license": "0BSD",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "undici-types",
+      "version": "7.24.6",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "update-browserslist-db",
+      "version": "1.3.4",
+      "license": "MIT",
+      "noticeOrigin": "published package license/notice files"
+    },
+    {
+      "name": "yallist",
+      "version": "3.1.1",
+      "license": "ISC",
+      "noticeOrigin": "published package license/notice files"
+    }
+  ]
+}

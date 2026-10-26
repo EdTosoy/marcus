@@ -18,7 +18,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "engine:prepare": "node scripts/prepare-engine.mjs"
+    "engine:prepare": "node scripts/prepare-engine.mjs",
+    "compliance:check": "node scripts/check-release-compliance.mjs",
+    "compliance:test": "node --test scripts/release-compliance.test.mjs",
+    "compliance:source": "python3 scripts/package-stockfish-source.py --verify"
   },
   "dependencies": {
     "chess.js": "1.4.0",

@@ -89,6 +89,8 @@ After completing the baseline and leaving any active independent check, **Learni
 
 Deployment preparation: [Phase D0 readiness, current Vercel settings and proposed D1 procedure](docs/PHASE_D0_DEPLOYMENT_READINESS.md). No preview or production deployment is authorized by this preparation.
 
+Release compliance: [exact Stockfish source distribution](docs/STOCKFISH_SOURCE_DISTRIBUTION.md), [application licensing assessment](docs/APPLICATION_LICENSE_ASSESSMENT.md), [open source notices](docs/OPEN_SOURCE_NOTICES.md), [D0.1 verification](docs/PHASE_D0_1_VERIFICATION.md) and [D1 gates](docs/PHASE_D1_RELEASE_GATES.md). The app's footer links to `/open-source`; `pnpm engine:prepare` packages the pinned binaries with their exact source and notices. Run `pnpm compliance:source`, `pnpm compliance:check` and `pnpm compliance:test` for technical artifact validation; none grants legal or deployment approval.
+
 Gameplay uses `marcus:games:v1`: one active game, the latest 20 completed games, PGN, and up to three review decisions per game with 30 retries per decision. Games are bounded at 600 plies. Unsupported/corrupt game data falls back visibly; earlier learning keys are preserved. Export PGN from Play or Review and recovery evidence as JSON from Review. Short engine searches and approximate difficulty are not validated beginner calibration, and a possible capture is not automatically a blunder.
 
 - [Product vision](docs/PRODUCT_VISION.md)

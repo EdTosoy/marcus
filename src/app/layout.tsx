@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 import { EvaluationTimingProvider } from "@/components/evaluation-timing";
 import "./globals.css";
@@ -62,6 +63,11 @@ export default function RootLayout({
               save progress locally.
             </p>
           </noscript>
+          <footer className="shell license-footer">
+            <Link href="/open-source" prefetch={false}>
+              Open source licenses
+            </Link>
+          </footer>
         </EvaluationTimingProvider>
       </body>
     </html>
