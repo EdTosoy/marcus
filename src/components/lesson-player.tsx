@@ -13,13 +13,15 @@ import { validateResponse } from "@/domain/learning/validation";
 import type { Lesson, StudentResponse } from "@/domain/learning/types";
 import { practiceAgain } from "@/infrastructure/local-progress";
 import { useLessonProgress } from "./use-lesson-progress";
-import { ChessBoard } from "./chess-board";
+import { ChessBoard, type ChessBoardHandle } from "./chess-board";
 import { Icon } from "./icon";
 
 export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   const { data, loaded, storageNotice, setData } = useLessonProgress(lesson);
   const [inputNotice, setInputNotice] = useState("");
   const taskHeading = useRef<HTMLHeadingElement>(null);
+  const completionHeading = useRef<HTMLHeadingElement>(null);
+  const board = useRef<ChessBoardHandle>(null);
 
   const session = data.active;
   const exercise = lesson.exercises[session.index];
@@ -50,8 +52,12 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
       ...current,
       active: transition(lesson, current.active, event),
     }));
+    if (event.type === "retry")
+      requestAnimationFrame(() => board.current?.focus());
     if (event.type === "next")
-      requestAnimationFrame(() => taskHeading.current?.focus());
+      requestAnimationFrame(() =>
+        (taskHeading.current ?? completionHeading.current)?.focus(),
+      );
   }
   function submit(response: StudentResponse) {
     if (!exercise || !loaded) return;
@@ -70,7 +76,9 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
         <div className="completion-mark">
           <Icon name="check" size={32} />
         </div>
-        <h1>You’re learning to look first.</h1>
+        <h1 ref={completionHeading} tabIndex={-1}>
+          You’re learning to look first.
+        </h1>
         <p className="lead">
           Lesson complete. Keep asking: “What is my opponent attacking?”
         </p>
@@ -125,7 +133,10 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
         </section>
         <button
           className="button primary"
-          onClick={() => setData((current) => practiceAgain(current, lesson))}
+          onClick={() => {
+            setData((current) => practiceAgain(current, lesson));
+            requestAnimationFrame(() => taskHeading.current?.focus());
+          }}
         >
           Practice this lesson again
           <Icon name="reset" />
@@ -174,7 +185,44 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
           {storageNotice}
         </p>
       )}
-      <div className="lesson-workbench">
+      <div className="lesson-workbench guided-workbench">
+        <section
+          className="teaching-column lesson-task"
+          aria-labelledby="task-title"
+        >
+          <div className="task-label">
+            <Icon
+              name={intro ? "book" : exercise?.assessment ? "check" : "rook"}
+              size={20}
+            />
+            <span>
+              {intro
+                ? "Before your next move"
+                : exercise?.assessment
+                  ? repeated
+                    ? "Revisit the position"
+                    : "A new position"
+                  : "Your turn"}
+            </span>
+          </div>
+          <h2 id="task-title" ref={taskHeading} tabIndex={-1}>
+            {intro ? "First, notice the threat." : exercise?.title}
+          </h2>
+          <p className="instruction">
+            {intro
+              ? lesson.introduction.explanation
+              : repeated && exercise?.assessment
+                ? (exercise.repeatInstruction ?? exercise.instruction)
+                : exercise?.instruction}
+          </p>
+          {!intro && !feedback && (
+            <p className="task-guidance">
+              {exercise?.answer.type === "attacker"
+                ? "Tap the attacker. You don’t need to move a piece yet."
+                : "The outlined piece is yours to move. Every safe legal destination is accepted."}
+            </p>
+          )}
+        </section>
         <section className="board-column" aria-label="Lesson position">
           <div className="board-meta">
             <span>
@@ -189,7 +237,13 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
             </span>
           </div>
           <ChessBoard
-            key={`${session.index}-${record.activeAttempt}`}
+            ref={board}
+            interactionKey={`${session.index}-${record.activeAttempt}`}
+            lastMove={
+              activeAttempt?.response.type === "move"
+                ? activeAttempt.response.move
+                : undefined
+            }
             fen={fen}
             locked={intro || !loaded || Boolean(feedback)}
             focusSquare={
@@ -243,28 +297,12 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
               : "White’s perspective. Files a–h, ranks 1–8."}
           </p>
         </section>
-        <section className="teaching-column" aria-labelledby="task-title">
-          <div className="task-label">
-            <Icon
-              name={intro ? "book" : exercise?.assessment ? "check" : "rook"}
-              size={20}
-            />
-            <span>
-              {intro
-                ? "Before your next move"
-                : exercise?.assessment
-                  ? repeated
-                    ? "Revisit the position"
-                    : "A new position"
-                  : "Your turn"}
-            </span>
-          </div>
-          <h2 id="task-title" ref={taskHeading} tabIndex={-1}>
-            {intro ? "First, notice the threat." : exercise?.title}
-          </h2>
+        <section
+          className="teaching-column lesson-response"
+          aria-label="Lesson guidance and continuation"
+        >
           {intro ? (
             <>
-              <p className="instruction">{lesson.introduction.explanation}</p>
               <div className="thinking-note">
                 <span className="note-rule" />
                 <p>
@@ -288,18 +326,6 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
             </>
           ) : (
             <>
-              <p className="instruction">
-                {repeated && exercise?.assessment
-                  ? (exercise.repeatInstruction ?? exercise.instruction)
-                  : exercise?.instruction}
-              </p>
-              {!feedback && (
-                <p className="task-guidance">
-                  {exercise?.answer.type === "attacker"
-                    ? "Tap the attacker. You don’t need to move a piece yet."
-                    : "The outlined piece is yours to move. Every safe legal destination is accepted."}
-                </p>
-              )}
               {feedback && (
                 <div className={`feedback ${feedback.kind}`} role="status">
                   <h3>

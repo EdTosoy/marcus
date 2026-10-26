@@ -137,6 +137,13 @@ test("pilot guidance shows stages and counts without exposing baseline answers",
     page.getByText("1 of 5 baseline decisions recorded", { exact: true }),
   ).toBeVisible();
   await expect(
+    page.getByRole("link", {
+      name: "Return to the learning sequence",
+      exact: true,
+    }),
+  ).toBeHidden();
+  await page.locator("summary").filter({ hasText: "Unfamiliar check" }).click();
+  await expect(
     page.getByText(
       "Educator-approved held-out content is a pilot prerequisite",
       { exact: true },
@@ -153,6 +160,75 @@ test("pilot guidance shows stages and counts without exposing baseline answers",
   ).toBe(1);
 });
 
+test("session pages keep the next action clear and supporting details optional", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.goto("/pilot");
+  const begin = page.getByRole("link", {
+    name: "Begin with the baseline",
+    exact: true,
+  });
+  const bounds = (await begin.boundingBox())!;
+  expect(bounds.y + bounds.height).toBeLessThan(900);
+  await expect(page.locator("main details[open]")).toHaveCount(0);
+  await expect(
+    page.getByText("Facilitator setup — required before testing", {
+      exact: true,
+    }),
+  ).toHaveCount(0);
+  const firstStage = page.locator(".pilot-step summary").first();
+  await firstStage.focus();
+  await page.keyboard.press("Enter");
+  await expect(
+    page.getByRole("link", { name: "Open baseline", exact: true }),
+  ).toBeVisible();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("main details[open]")).toHaveCount(0);
+  await page.goto("/evaluation");
+  const action = page.getByRole("link", {
+    name: "Return to your check",
+    exact: true,
+  });
+  const actionBounds = (await action.boundingBox())!;
+  expect(actionBounds.y + actionBounds.height).toBeLessThan(900);
+  await expect(page.locator("main details[open]")).toHaveCount(0);
+  await expect(page.locator(".evaluation-metrics")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /Export/ })).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "Start training timer", exact: true }),
+  ).toBeHidden();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  const mobileContent = (await page.locator(".evaluation-main").boundingBox())!;
+  const mobileTools = (await page.locator(".session-tools").boundingBox())!;
+  expect(mobileTools.y).toBeGreaterThan(
+    mobileContent.y + mobileContent.height + 24,
+  );
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  const desktopContent = (await page
+    .locator(".evaluation-main")
+    .boundingBox())!;
+  const desktopTools = (await page.locator(".session-tools").boundingBox())!;
+  expect(desktopTools.x).toBeGreaterThan(
+    desktopContent.x + desktopContent.width + 40,
+  );
+  expect(Math.abs(desktopTools.y - desktopContent.y)).toBeLessThan(8);
+  await page.goto("/pilot");
+  const row = (await page
+    .locator(".pilot-step summary")
+    .first()
+    .boundingBox())!;
+  const arrow = (await page
+    .locator(".pilot-step summary svg")
+    .first()
+    .boundingBox())!;
+  expect(Math.abs(row.x + row.width - arrow.x - arrow.width)).toBeLessThan(8);
+});
+
 test("local outcomes remain sealed during partial baseline and active independent checks", async ({
   page,
 }) => {
@@ -166,13 +242,20 @@ test("local outcomes remain sealed during partial baseline and active independen
   await page.goto("/evaluation");
   await expect(
     page.getByRole("heading", {
-      name: "Finish the check before viewing outcomes.",
+      name: "Finish your check first",
     }),
   ).toBeVisible();
   await expect(page.locator(".evaluation-metrics")).toHaveCount(0);
   await expect(
     page.getByRole("button", { name: "Export local evaluation (JSON)" }),
   ).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "Start training timer" }),
+  ).toBeHidden();
+  await page
+    .locator("summary")
+    .filter({ hasText: "Training timer (optional)" })
+    .click();
   await expect(
     page.getByRole("button", { name: "Start training timer" }),
   ).toBeVisible();

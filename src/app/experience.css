@@ -193,9 +193,6 @@ main:focus {
 .board-square:focus-visible {
   outline-color: var(--board-focus-ring);
 }
-.board-square[aria-pressed="true"] {
-  box-shadow: inset 0 0 0 3px var(--board-mark);
-}
 .feedback {
   border-left: 3px solid var(--color-accent);
 }
@@ -246,20 +243,6 @@ main:focus {
 .review-decisions .board-controls {
   margin-bottom: 0;
 }
-.pilot-intro {
-  display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
-  gap: 40px;
-  align-items: start;
-}
-.pilot-intro h1 {
-  font-size: clamp(1.8rem, 3vw, 2.8rem);
-  max-width: 20ch;
-}
-.pilot-intro p {
-  margin-top: 16px;
-  color: var(--color-muted);
-}
 .pilot-note {
   padding: 20px;
   background: var(--color-paper-2);
@@ -278,18 +261,18 @@ main:focus {
 .pilot-step {
   counter-increment: pilot;
   display: grid;
-  grid-template-columns: 36px minmax(0, 1fr) auto;
-  gap: 20px;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 24px;
   align-items: start;
   padding-block: 24px;
   border-top: 1px solid var(--color-rule);
 }
 .pilot-step::before {
   content: counter(pilot, decimal-leading-zero);
-  font-size: 13px;
+  font-size: 16px;
   color: var(--color-accent);
   font-weight: 650;
-  padding-top: 4px;
+  padding-top: 14px;
 }
 .pilot-step h2 {
   font-size: 21px;
@@ -309,6 +292,71 @@ main:focus {
   margin-top: 8px;
   color: var(--color-accent);
 }
+.session-disclosure {
+  width: 100%;
+  border-top: 1px solid var(--color-rule);
+}
+.session-disclosure > summary,
+.pilot-step summary {
+  min-height: 44px;
+  padding-block: 16px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.session-disclosure > summary::marker,
+.pilot-step summary::marker {
+  color: var(--color-accent);
+}
+.session-disclosure > :not(summary) {
+  margin-bottom: 16px;
+}
+.session-disclosure > p {
+  color: var(--color-muted);
+  max-width: 65ch;
+}
+.pilot-step summary h2 {
+  max-width: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  font-size: 20px;
+  margin: 0;
+}
+.pilot-step summary {
+  list-style: none;
+  padding-block: 8px;
+}
+.pilot-step summary::-webkit-details-marker {
+  display: none;
+}
+.pilot-step summary svg {
+  flex-shrink: 0;
+  color: var(--color-muted);
+}
+.pilot-step details[open] summary svg {
+  transform: rotate(90deg);
+}
+.pilot-step-body {
+  display: grid;
+  gap: 20px;
+  padding-block: 16px 8px;
+  max-width: 64ch;
+}
+.pilot-step .pilot-step-body .button {
+  grid-column: auto;
+  justify-self: start;
+}
+.pilot-step > div > .pilot-status {
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+.evaluation-timer {
+  max-width: 720px;
+}
+.evaluation-timer > .board-controls {
+  margin-top: 16px;
+}
 .pilot-footer {
   padding-block: 24px;
   border-top: 1px solid var(--color-rule);
@@ -320,6 +368,9 @@ main:focus {
   color: var(--color-muted);
 }
 .study-boundary {
+  display: grid;
+  justify-items: start;
+  gap: 16px;
   border-left: 3px solid var(--color-accent);
   padding: 16px 20px;
   background: var(--color-paper-2);
@@ -411,14 +462,10 @@ main:focus {
   .game-sidebar h2 {
     font-size: 24px;
   }
-  .pilot-intro {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 24px;
-  }
   .pilot-step {
     grid-template-columns: 28px minmax(0, 1fr);
     gap: 12px;
-    padding-block: 22px;
+    padding-block: 20px;
   }
   .pilot-step .button {
     grid-column: 2;
@@ -446,5 +493,162 @@ main:focus {
   }
   .completion h1 {
     font-size: 30px;
+  }
+}
+
+/* Session pages: a spacious main task, with tools given their own quiet area. */
+.session-page {
+  padding-block: 56px 80px;
+}
+.session-page > * + * {
+  margin-top: 48px;
+}
+.session-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--color-rule);
+}
+.session-heading h1 {
+  font-size: clamp(2rem, 3.4vw, 2.75rem);
+  line-height: 1.12;
+  letter-spacing: -0.04em;
+}
+.session-heading p {
+  margin-top: 14px;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--color-muted);
+}
+.session-heading > .button {
+  flex-shrink: 0;
+}
+.session-page .storage-notice {
+  margin-top: 24px;
+}
+.pilot-preparation {
+  padding: 8px 24px;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-card);
+}
+.pilot-preparation > :not(summary) {
+  max-width: 70ch;
+  line-height: 1.8;
+}
+.pilot-main > .pilot-steps {
+  margin-top: 32px;
+}
+.evaluation-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(280px, 0.85fr);
+  gap: 72px;
+  align-items: start;
+}
+.evaluation-main {
+  min-width: 0;
+}
+.evaluation-page .study-boundary {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  gap: 24px;
+}
+.evaluation-main h2 {
+  font-size: 28px;
+  line-height: 1.25;
+  max-width: 24ch;
+}
+.evaluation-main .study-boundary p {
+  max-width: 46ch;
+  color: var(--color-muted);
+  line-height: 1.8;
+}
+.evaluation-main .evidence-view {
+  gap: 28px;
+}
+.evaluation-main .evidence-view > * + * {
+  margin-top: 0;
+}
+.evaluation-main .evaluation-metrics > div {
+  padding-block: 18px;
+  gap: 24px;
+  align-items: center;
+}
+.evaluation-main .evaluation-metrics {
+  width: 100%;
+}
+.evaluation-main .evaluation-metrics dt {
+  max-width: 70%;
+  line-height: 1.6;
+  font-size: 15px;
+  color: var(--color-muted);
+}
+.evaluation-main .evaluation-metrics dd {
+  font-size: 22px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.session-tools {
+  padding: 24px 28px;
+  background: var(--color-paper-2);
+  border-radius: var(--radius-card);
+  min-width: 0;
+}
+.session-tools .session-disclosure {
+  border: 0;
+}
+.session-tools .session-disclosure > summary {
+  padding-block: 8px;
+}
+.session-tools .session-disclosure > p {
+  line-height: 1.8;
+  font-size: 14px;
+}
+.session-tools .session-disclosure > .button {
+  margin-block: 8px 20px;
+}
+.session-tools .board-controls {
+  display: grid;
+  gap: 16px;
+  justify-items: start;
+  font-size: 14px;
+}
+@media (max-width: 900px) {
+  .evaluation-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+  }
+}
+@media (max-width: 600px) {
+  .session-page {
+    padding-block: 32px 56px;
+  }
+  .session-page > * + * {
+    margin-top: 32px;
+  }
+  .session-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    padding-bottom: 28px;
+  }
+  .session-heading p {
+    font-size: 16px;
+    margin-top: 12px;
+  }
+  .pilot-main .session-heading > .button {
+    width: 100%;
+  }
+  .pilot-preparation {
+    padding-inline: 20px;
+  }
+  .session-tools {
+    padding: 20px 24px;
+  }
+  .evaluation-main h2 {
+    font-size: 25px;
   }
 }

@@ -23,6 +23,13 @@ test("optional foreground timing and separate local evaluation export survive na
   );
   await page.goto("/evaluation");
   await expect(page.getByText("5 of 5", { exact: true })).toBeVisible();
+  const metrics = (await page.locator(".evaluation-metrics").boundingBox())!;
+  const content = (await page.locator(".evaluation-main").boundingBox())!;
+  expect(metrics.width).toBeGreaterThan(content.width * 0.95);
+  await page
+    .locator("summary")
+    .filter({ hasText: "Training timer (optional)" })
+    .click();
   await activate(page, "Start training timer");
   await page.clock.fastForward(5000);
   await page.getByRole("link", { name: "Go to learning practice" }).click();
@@ -59,6 +66,10 @@ test("optional foreground timing and separate local evaluation export survive na
     ),
   ).toBe(9);
   await page.reload();
+  await page
+    .locator("summary")
+    .filter({ hasText: "Training timer (optional)" })
+    .click();
   await expect(
     page.getByRole("button", { name: "Start training timer", exact: true }),
   ).toBeVisible();

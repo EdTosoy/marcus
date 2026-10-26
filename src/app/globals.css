@@ -189,9 +189,11 @@ nav a:hover {
 }
 .board-square.selected {
   background: var(--board-selection);
+  box-shadow: inset 0 0 0 3px var(--board-dot);
 }
-.board-square.piece-focus {
-  box-shadow: inset 0 0 0 3px var(--board-mark);
+.board-square.piece-focus .piece-visual {
+  outline: 3px dashed var(--board-dot);
+  outline-offset: -6px;
 }
 .board-square.legal-destination::after {
   content: "";
@@ -202,12 +204,53 @@ nav a:hover {
   border-radius: 50%;
   inset: 38%;
   background: var(--board-dot);
-  opacity: 0.55;
+  opacity: 1;
+}
+.board-square.capture-destination::after {
+  width: auto;
+  height: auto;
+  inset: 8%;
+  background: transparent;
+  border: 3px solid var(--board-dot);
+  /* Separate the marker from both black and white piece artwork. */
+  box-shadow:
+    0 0 0 2px var(--board-light),
+    inset 0 0 0 2px var(--board-light);
+}
+.board-square.last-move::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  inset: 5%;
+  border: 0 solid var(--board-dot);
+  border-top-width: 3px;
+  border-left-width: 3px;
+  width: 18%;
+  height: 18%;
+}
+.check-marker {
+  position: absolute;
+  top: 3%;
+  right: 3%;
+  min-width: 1em;
+  text-align: center;
+  font-size: clamp(12px, 1.6vw, 18px);
+  line-height: 1;
+  font-weight: 700;
+  color: var(--board-light);
+  background: var(--board-dot);
+  border: 1px solid var(--board-light);
+  border-radius: 2px;
+  pointer-events: none;
 }
 .board-square:focus-visible {
-  outline: 3px solid var(--color-focus);
-  outline-offset: -4px;
+  /* A separate inner frame keeps focus distinct from selection/highlight. */
+  outline: 3px double var(--board-focus-ring);
+  outline-offset: -3px;
   z-index: var(--z-raised);
+}
+.board-square.selected:focus-visible {
+  box-shadow: none;
 }
 .piece-visual {
   width: 100%;
@@ -645,24 +688,6 @@ textarea {
   }
   .teaching-column {
     display: contents;
-  }
-  .teaching-column > * {
-    order: 6;
-  }
-  .teaching-column .task-label {
-    order: 1;
-  }
-  .teaching-column #task-title {
-    order: 2;
-  }
-  .teaching-column .instruction {
-    order: 3;
-  }
-  .teaching-column .task-guidance {
-    order: 4;
-  }
-  .board-column {
-    order: 5;
   }
   .teaching-column h2 {
     font-size: 26px;
@@ -1125,4 +1150,34 @@ textarea {
 }
 .gameplay-main .evidence-view > * + * {
   margin-top: var(--space-lg);
+}
+
+/* Read question → explore board → guidance in the same DOM order at every width. */
+.guided-workbench {
+  grid-template-areas: "board task" "board response";
+  grid-template-rows: auto 1fr;
+  row-gap: var(--space-lg);
+}
+.guided-workbench > .lesson-task {
+  grid-area: task;
+}
+.guided-workbench > .board-column {
+  grid-area: board;
+}
+.guided-workbench > .lesson-response {
+  grid-area: response;
+  padding-top: 0;
+}
+.promotion-picker > p {
+  flex-basis: 100%;
+  font-size: var(--text-sm);
+}
+@media (max-width: 680px) {
+  .guided-workbench {
+    grid-template-areas: "task" "board" "response";
+    grid-template-rows: auto;
+  }
+  .guided-workbench > .teaching-column {
+    display: flex;
+  }
 }

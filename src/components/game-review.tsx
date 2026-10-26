@@ -339,7 +339,11 @@ function FocusedReview({
             : "Analysis opportunity: no specific weakness has been established."}
         </p>
         <ChessBoard
-          key={`${decision.id}:${showOriginal}:${record.attempts.length}`}
+          interactionKey={`${decision.id}:${showOriginal}:${record.attempts.length}`}
+          lastMove={
+            candidate ??
+            (!showOriginal ? record.attempts.at(-1)?.move : undefined)
+          }
           fen={
             candidate
               ? (() => {
@@ -644,6 +648,7 @@ function Replay({
     <div className="replay-content">
       <ChessBoard
         fen={position.fen()}
+        lastMove={game.moves[ply - 1]}
         locked
         lockedMessage="Replay position. Use previous or next move to explore."
         orientation={game.player === "w" ? "white" : "black"}

@@ -1,15 +1,27 @@
 "use client";
 
-import { useId, useMemo, useState, type KeyboardEvent } from "react";
+import {
+  useId,
+  useImperativeHandle,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type Ref,
+} from "react";
 import { Chess, type Square } from "chess.js";
-import { Chessboard } from "react-chessboard";
+import { Chessboard, defaultArrowOptions } from "react-chessboard";
 import {
   isSquare,
+  gameStatus,
   pieceNames,
   type MoveInput,
   type Promotion,
 } from "@/domain/chess/game";
+import { nextBoardSquare } from "./board-navigation";
 
+export type ChessBoardHandle = { focus: () => void };
 type Props = {
   fen: string;
   onMove?: (move: MoveInput) => void;
@@ -18,7 +30,16 @@ type Props = {
   lockedMessage?: string;
   focusSquare?: Square;
   arrow?: { from: Square; to: Square };
+  lastMove?: Pick<MoveInput, "from" | "to">;
   orientation?: "white" | "black";
+  interactionKey?: string | number;
+  ref?: Ref<ChessBoardHandle>;
+};
+type Interaction = {
+  key: string;
+  selected: Square | null;
+  promotion: { from: Square; to: Square } | null;
+  notice: string;
 };
 
 export function ChessBoard({
@@ -26,97 +47,179 @@ export function ChessBoard({
   onMove,
   onSquare,
   locked = false,
-  lockedMessage = "Position paused. Read the explanation to continue.",
+  lockedMessage,
   focusSquare,
   arrow,
+  lastMove,
   orientation = "white",
+  interactionKey = "",
+  ref,
 }: Props) {
   const id = useId().replaceAll(":", "");
+  const root = useRef<HTMLDivElement>(null);
+  const promotionChoice = useRef<HTMLButtonElement>(null);
+  const focusWithin = useRef(false);
   const game = useMemo(() => new Chess(fen), [fen]);
-  const [selected, setSelected] = useState<Square | null>(null);
+  const positionKey = `${fen}|${interactionKey}|${locked}`;
+  const livePositionKey = useRef<string | null>(positionKey);
+  useLayoutEffect(() => {
+    livePositionKey.current = positionKey;
+    return () => {
+      livePositionKey.current = null;
+    };
+  }, [positionKey]);
+  const [interaction, setInteraction] = useState<Interaction>({
+    key: positionKey,
+    selected: null,
+    promotion: null,
+    notice: "",
+  });
+  // Reset transient state without remounting square controls or losing focus.
+  if (interaction.key !== positionKey)
+    setInteraction({
+      key: positionKey,
+      selected: null,
+      promotion: null,
+      notice: "",
+    });
+  const { selected, promotion, notice } =
+    interaction.key === positionKey
+      ? interaction
+      : { selected: null, promotion: null, notice: "" };
   const [focused, setFocused] = useState<Square>("a1");
-  const [promotion, setPromotion] = useState<{
-    from: Square;
-    to: Square;
-  } | null>(null);
-  const [notice, setNotice] = useState("");
   const legal = selected ? game.moves({ square: selected, verbose: true }) : [];
+  const unavailable = locked || (!onSquare && (game.isGameOver() || !onMove));
+  const side = game.turn() === "w" ? "White" : "Black";
+  const terminal = !onSquare && game.isGameOver();
+  const pausedDescription =
+    lockedMessage ??
+    (terminal
+      ? gameStatus(game)
+      : "Position paused. Read the explanation to continue.");
+  const modeDescription = unavailable
+    ? terminal && !lockedMessage
+      ? ""
+      : pausedDescription
+    : onSquare
+      ? "Activate a square to answer."
+      : "Select a piece, then a destination.";
+  const description = `${terminal ? gameStatus(game) : `${side} to move${game.inCheck() ? ", in check" : ""}.`} ${orientation === "white" ? "White" : "Black"} at the bottom. ${modeDescription}`;
+
+  function update(patch: Partial<Interaction>) {
+    setInteraction((current) => ({ ...current, ...patch }));
+  }
+  function focus(square: Square, preventScroll = false) {
+    setFocused(square);
+    root.current
+      ?.querySelector<HTMLElement>(`[data-board-square="${square}"]`)
+      ?.focus({ preventScroll });
+  }
+  useImperativeHandle(ref, () => ({ focus: () => focus(focused) }));
+  useLayoutEffect(() => {
+    if (promotion) promotionChoice.current?.focus();
+  }, [promotion]);
+  useLayoutEffect(() => {
+    if (
+      !promotion &&
+      focusWithin.current &&
+      document.activeElement === document.body
+    )
+      root.current
+        ?.querySelector<HTMLElement>(`[data-board-square="${focused}"]`)
+        ?.focus({ preventScroll: true });
+  }, [positionKey, promotion, focused]);
 
   function requestMove(from: Square, to: Square): boolean {
-    if (locked || game.isGameOver() || !onMove) return false;
+    // The pinned renderer may finish a drag with its drag-start callback.
+    // A reset, lock, new FEN or unmount makes that callback obsolete.
+    if (livePositionKey.current !== positionKey) return false;
+    if (unavailable || promotion || !onMove) return false;
     const options = game
       .moves({ square: from, verbose: true })
       .filter((move) => move.to === to);
+    focus(to, true);
     if (!options.length) {
-      setNotice(
-        "That move is not legal. Select a piece and choose a marked destination.",
-      );
+      update({
+        notice:
+          "That move is not legal. Select a piece and choose a marked destination.",
+      });
       return false;
     }
-    if (options.some((move) => move.promotion)) setPromotion({ from, to });
-    else onMove({ from, to });
-    setSelected(null);
-    setNotice("");
+    update({
+      selected: null,
+      notice: "",
+      promotion: options.some((move) => move.promotion) ? { from, to } : null,
+    });
+    if (!options.some((move) => move.promotion)) onMove({ from, to });
     return true;
   }
-
   function select(square: Square) {
-    if (locked || promotion) return;
+    focus(square, true);
+    if (unavailable || promotion) return;
     if (onSquare) {
       onSquare(square);
       return;
     }
-    if (game.isGameOver()) return;
     if (selected === square) {
-      setSelected(null);
+      update({ selected: null, notice: "Selection cancelled." });
       return;
     }
     const piece = game.get(square);
     if (piece?.color === game.turn()) {
-      setSelected(square);
-      setNotice(
-        `${pieceNames[piece.type]} on ${square} selected. Marked squares are legal moves; they may still be attacked.`,
-      );
+      update({
+        selected: square,
+        notice: `${pieceNames[piece.type]} on ${square} selected. Marked squares are legal moves; they may still be attacked.`,
+      });
     } else if (selected) requestMove(selected, square);
+    else update({ notice: `Select a ${side.toLowerCase()} piece to move.` });
   }
-
+  function cancel() {
+    const source = promotion?.from ?? selected;
+    update({ selected: null, promotion: null, notice: "Selection cancelled." });
+    if (source) focus(source);
+  }
   function navigate(event: KeyboardEvent<HTMLDivElement>, square: Square) {
+    // Keep the visual drag sensor out of square-keyboard activation.
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       event.stopPropagation();
       select(square);
       return;
     }
-    if (event.key === "Escape") {
-      setSelected(null);
-      return;
-    }
-    const direction = orientation === "white" ? 1 : -1;
-    const delta: Record<string, [number, number]> = {
-      ArrowRight: [direction, 0],
-      ArrowLeft: [-direction, 0],
-      ArrowUp: [0, direction],
-      ArrowDown: [0, -direction],
-    };
-    const change = delta[event.key];
-    if (!change) return;
+    const next = nextBoardSquare(square, event.key, orientation, event.ctrlKey);
+    if (!next) return;
     event.preventDefault();
     event.stopPropagation();
-    const file = Math.max(97, Math.min(104, square.charCodeAt(0) + change[0]));
-    const rank = Math.max(1, Math.min(8, Number(square[1]) + change[1]));
-    const next = `${String.fromCharCode(file)}${rank}`;
-    if (isSquare(next)) {
-      setFocused(next);
-      document.getElementById(`${id}-key-${next}`)?.focus();
-    }
+    focus(next);
   }
 
   return (
-    <div className="board-interaction">
+    <div
+      className="board-interaction"
+      ref={root}
+      onFocusCapture={() => {
+        focusWithin.current = true;
+      }}
+      onBlurCapture={(event) => {
+        if (
+          event.relatedTarget &&
+          !event.currentTarget.contains(event.relatedTarget)
+        )
+          focusWithin.current = false;
+      }}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          event.preventDefault();
+          // The renderer's document listener must also cancel a pointer drag.
+          cancel();
+        }
+      }}
+    >
       <div
         className="chess-surface"
+        role="group"
         aria-label="Interactive chessboard"
-        aria-describedby={`${id}-help`}
+        aria-describedby={`${id}-description ${id}-help ${id}-legend`}
       >
         <Chessboard
           options={{
@@ -126,12 +229,21 @@ export function ChessBoard({
             showNotation: true,
             showAnimations: false,
             allowDrawingArrows: false,
-            allowDragging:
-              !locked && !onSquare && !promotion && !game.isGameOver(),
+            arrowOptions: {
+              ...defaultArrowOptions,
+              opacity: 1,
+              arrowStartOffset: 0.4,
+            },
+            allowDragging: !unavailable && !onSquare && !promotion,
             canDragPiece: ({ piece }) => piece.pieceType[0] === game.turn(),
             onPieceDrag: ({ square }) => {
-              if (square && isSquare(square)) setSelected(square);
+              if (square && isSquare(square)) {
+                focus(square, true);
+                update({ selected: square });
+              }
             },
+            onPieceDragCancel: () =>
+              update({ selected: null, notice: "Move cancelled." }),
             onPieceDrop: ({ sourceSquare, targetSquare }) =>
               isSquare(sourceSquare) &&
               targetSquare !== null &&
@@ -149,39 +261,75 @@ export function ChessBoard({
                   {
                     startSquare: arrow.from,
                     endSquare: arrow.to,
-                    color: "var(--color-accent)",
+                    color: "var(--board-dot)",
                   },
                 ]
               : [],
             squareRenderer: ({ square, children }) => {
               const piece = isSquare(square) ? game.get(square) : undefined;
-              const destination = legal.some((move) => move.to === square);
+              const destination = legal.find((move) => move.to === square);
+              const capture = Boolean(destination?.captured);
+              const check =
+                piece?.type === "k" &&
+                piece.color === game.turn() &&
+                game.inCheck();
+              const last = lastMove?.from === square || lastMove?.to === square;
+              const label = `${square}${piece ? ` ${piece.color === "w" ? "white" : "black"} ${pieceNames[piece.type]}` : " empty"}${destination ? `, legal destination${capture ? ", capture" : ""}` : ""}${focusSquare === square ? ", instructional highlight" : ""}${check ? ", in check" : ""}${last ? `, last move ${lastMove.from === square ? "from" : "to"}` : ""}`;
               return (
                 <div
-                  id={`${id}-key-${square}`}
                   role="button"
-                  aria-label={`${square}${piece ? ` ${piece.color === "w" ? "white" : "black"} ${pieceNames[piece.type]}` : " empty"}${destination ? ", legal destination" : ""}`}
-                  aria-pressed={selected === square}
-                  aria-disabled={locked}
+                  id={`${id}-key-${square}`}
+                  data-board-square={square}
+                  aria-label={label}
+                  aria-pressed={
+                    !onSquare && piece?.color === game.turn()
+                      ? selected === square
+                      : undefined
+                  }
+                  aria-disabled={unavailable || Boolean(promotion)}
                   tabIndex={focused === square ? 0 : -1}
-                  className={`board-square ${selected === square ? "selected" : ""} ${focusSquare === square ? "piece-focus" : ""} ${destination ? "legal-destination" : ""}`}
+                  className={`board-square square-control ${selected === square ? "selected" : ""} ${focusSquare === square ? "piece-focus" : ""} ${destination ? (capture ? "capture-destination legal-destination" : "legal-destination") : ""} ${last ? "last-move" : ""}`}
                   onFocus={() => {
                     if (isSquare(square)) setFocused(square);
                   }}
                   onKeyDownCapture={(event) => {
                     if (isSquare(square)) navigate(event, square);
                   }}
-                  ref={(element) => {
-                    element
-                      ?.querySelectorAll<HTMLElement>("[tabindex]")
-                      .forEach((child) => {
-                        child.tabIndex = -1;
-                      });
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    if (isSquare(square)) select(square);
                   }}
                 >
-                  <div className="piece-visual" aria-hidden="true">
+                  <div
+                    className="piece-visual"
+                    aria-hidden="true"
+                    ref={(element) => {
+                      // 5.12.1 has no drag-wrapper accessibility option. These visual
+                      // wrappers keep pointer listeners; the square owns keyboard/AT.
+                      element
+                        ?.querySelectorAll<HTMLElement>(
+                          "[tabindex], [role=button]",
+                        )
+                        .forEach((child) => {
+                          for (const attribute of [
+                            "tabindex",
+                            "role",
+                            "aria-roledescription",
+                            "aria-describedby",
+                            "aria-pressed",
+                            "aria-disabled",
+                          ])
+                            child.removeAttribute(attribute);
+                        });
+                    }}
+                  >
                     {children}
                   </div>
+                  {check && (
+                    <span className="check-marker" aria-hidden="true">
+                      !
+                    </span>
+                  )}
                 </div>
               );
             },
@@ -189,34 +337,58 @@ export function ChessBoard({
         />
       </div>
       {promotion && (
-        <fieldset className="promotion-picker">
+        <fieldset
+          className="promotion-picker"
+          aria-describedby={`${id}-promotion`}
+        >
           <legend>Promote your pawn to…</legend>
-          {(["q", "r", "b", "n"] as const).map((piece: Promotion) => (
+          <p id={`${id}-promotion`}>
+            Pawn from {promotion.from} to {promotion.to}. Choose a piece or
+            cancel.
+          </p>
+          {(["q", "r", "b", "n"] as const).map((piece: Promotion, index) => (
             <button
               key={piece}
+              type="button"
+              ref={index === 0 ? promotionChoice : undefined}
               className="button quiet"
               onClick={() => {
-                onMove?.({ ...promotion, promotion: piece });
-                setPromotion(null);
+                if (unavailable) return;
+                const move = { ...promotion, promotion: piece };
+                update({ promotion: null });
+                focus(promotion.to);
+                onMove?.(move);
               }}
             >
               {pieceNames[piece]}
             </button>
           ))}
-          <button className="text-button" onClick={() => setPromotion(null)}>
+          <button type="button" className="text-button" onClick={cancel}>
             Cancel promotion
           </button>
         </fieldset>
       )}
-      <p id={`${id}-help`} className="board-help">
-        {locked
-          ? lockedMessage
-          : onSquare
-            ? "Tap a piece to answer."
-            : "Tap a piece, then a destination. Or drag to move."}{" "}
-        <span>Keyboard: arrow keys to explore, Enter to select.</span>
+      <p id={`${id}-description`} className="sr-only">
+        {description}
       </p>
-      <p className="sr-only" role="status">
+      <p id={`${id}-help`} className="board-help">
+        {unavailable
+          ? pausedDescription
+          : onSquare
+            ? "Tap a square to answer."
+            : "Tap a piece, then a destination. Or drag to move."}{" "}
+        <span>
+          Keyboard: arrows to explore, Enter or Space to activate, Escape to
+          cancel. Home/End: row edges; Ctrl+Home/End: board edges.
+        </span>
+      </p>
+      <p id={`${id}-legend`} className="sr-only">
+        Solid outline: selected. Dot: legal move. Ring: capture. Corner marks:
+        last move. Exclamation mark: check. Dashed outline: instructional
+        highlight.
+        {arrow && ` Instructional arrow from ${arrow.from} to ${arrow.to}.`}
+      </p>
+      <p className="sr-only" role="status" aria-atomic="true">
         {notice}
       </p>
     </div>

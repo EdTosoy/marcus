@@ -292,7 +292,12 @@ export function AdaptivePractice({
               </p>
               <div className="adaptive-board">
                 <ChessBoard
-                  key={`${run.id}-${run.feedbackOpen}-${run.attempts.length}`}
+                  interactionKey={`${run.id}-${run.feedbackOpen}-${run.attempts.length}`}
+                  lastMove={
+                    shownMove && attempt?.response.type === "move"
+                      ? attempt.response.move
+                      : undefined
+                  }
                   fen={shownMove ?? exercise.fen}
                   orientation={
                     new Chess(exercise.fen).turn() === "w" ? "white" : "black"

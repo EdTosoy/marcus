@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Chess, DEFAULT_POSITION } from "chess.js";
 import { gameStatus, replay, type MoveInput } from "@/domain/chess/game";
-import { ChessBoard } from "./chess-board";
+import { ChessBoard, type ChessBoardHandle } from "./chess-board";
 import { Icon } from "./icon";
 
 export function PracticeBoard() {
@@ -11,6 +11,8 @@ export function PracticeBoard() {
   const [moves, setMoves] = useState<MoveInput[]>([]);
   const [fenInput, setFenInput] = useState("");
   const [error, setError] = useState("");
+  const [positionVersion, setPositionVersion] = useState(0);
+  const board = useRef<ChessBoardHandle>(null);
   const [orientation, setOrientation] = useState<"white" | "black">("white");
   const game = useMemo(() => replay(startingFen, moves), [startingFen, moves]);
   return (
@@ -24,7 +26,9 @@ export function PracticeBoard() {
       <div className="lesson-workbench practice-workbench">
         <section className="board-column" aria-label="Practice position">
           <ChessBoard
-            key={`${startingFen}-${moves.length}`}
+            ref={board}
+            interactionKey={positionVersion}
+            lastMove={moves.at(-1)}
             fen={game.fen()}
             locked={game.isGameOver()}
             orientation={orientation}
@@ -37,7 +41,11 @@ export function PracticeBoard() {
             <button
               className="text-button"
               disabled={!moves.length}
-              onClick={() => setMoves((current) => current.slice(0, -1))}
+              onClick={() => {
+                setMoves((current) => current.slice(0, -1));
+                if (moves.length === 1)
+                  requestAnimationFrame(() => board.current?.focus());
+              }}
             >
               <Icon name="undo" size={17} />
               Undo
@@ -45,7 +53,11 @@ export function PracticeBoard() {
             <button
               className="text-button"
               disabled={!moves.length}
-              onClick={() => setMoves([])}
+              onClick={() => {
+                setMoves([]);
+                setPositionVersion((current) => current + 1);
+                requestAnimationFrame(() => board.current?.focus());
+              }}
             >
               <Icon name="reset" size={17} />
               Restart position
@@ -92,6 +104,7 @@ export function PracticeBoard() {
               try {
                 const position = new Chess(fenInput.trim());
                 setStartingFen(position.fen());
+                setPositionVersion((current) => current + 1);
                 setMoves([]);
                 setError("");
               } catch {
@@ -126,6 +139,7 @@ export function PracticeBoard() {
             className="text-button"
             onClick={() => {
               setStartingFen(DEFAULT_POSITION);
+              setPositionVersion((current) => current + 1);
               setMoves([]);
               setFenInput("");
               setError("");

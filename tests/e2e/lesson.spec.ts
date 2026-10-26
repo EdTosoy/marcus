@@ -102,6 +102,9 @@ test("complete lesson: mistakes, graduated hints, retry, reload, independent tra
     page.getByRole("heading", { name: "You’re learning to look first." }),
   ).toBeVisible();
   await expect(
+    page.getByRole("heading", { name: "You’re learning to look first." }),
+  ).toBeFocused();
+  await expect(
     page.getByText("Independent success", { exact: true }),
   ).toBeVisible();
   await expect(page.getByText("6 / 2", { exact: true })).toBeVisible();
@@ -126,6 +129,9 @@ test("complete lesson: mistakes, graduated hints, retry, reload, independent tra
   await expect(
     page.getByRole("heading", { name: "First, notice the threat." }),
   ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "First, notice the threat." }),
+  ).toBeFocused();
   expect(errors).toEqual([]);
 });
 

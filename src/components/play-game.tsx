@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { gameStatus, replay } from "@/domain/chess/game";
 import {
   gamePgn,
@@ -24,6 +24,15 @@ export function PlayGame() {
   const [paused, setPaused] = useState(false);
   const [retry, setRetry] = useState(0);
   const session = data.active;
+  const resultHeading = useRef<HTMLHeadingElement>(null);
+  const previouslyActive = useRef(false);
+  const hasActiveGame = Boolean(session);
+  useEffect(() => {
+    // Only an actual game ending moves focus; restoring a saved result does not.
+    if (previouslyActive.current && !hasActiveGame)
+      resultHeading.current?.focus();
+    previouslyActive.current = hasActiveGame;
+  }, [hasActiveGame]);
   const game = useMemo(
     () => (session ? replay(session.startingFen, session.moves) : null),
     [session],
@@ -119,7 +128,8 @@ export function PlayGame() {
               {gameStatus(game)}
             </p>
             <ChessBoard
-              key={`${session.id}:${session.moves.length}`}
+              interactionKey={session.id}
+              lastMove={session.moves.at(-1)}
               fen={game.fen()}
               orientation={session.player === "w" ? "white" : "black"}
               locked={engineTurn || paused}
@@ -234,7 +244,9 @@ export function PlayGame() {
         <section className="game-setup" aria-label="New game">
           {data.games[0] && (
             <div className="feedback">
-              <h2>{data.games[0].outcome?.reason}</h2>
+              <h2 ref={resultHeading} tabIndex={-1}>
+                {data.games[0].outcome?.reason}
+              </h2>
               <p>Game saved locally. Pick a few decisions to investigate.</p>
               <Link
                 className="button primary"
