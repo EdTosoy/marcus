@@ -87,6 +87,8 @@ After completing the baseline and leaving any active independent check, **Learni
 
 ## Documentation
 
+Deployment preparation: [Phase D0 readiness, current Vercel settings and proposed D1 procedure](docs/PHASE_D0_DEPLOYMENT_READINESS.md). No preview or production deployment is authorized by this preparation.
+
 Gameplay uses `marcus:games:v1`: one active game, the latest 20 completed games, PGN, and up to three review decisions per game with 30 retries per decision. Games are bounded at 600 plies. Unsupported/corrupt game data falls back visibly; earlier learning keys are preserved. Export PGN from Play or Review and recovery evidence as JSON from Review. Short engine searches and approximate difficulty are not validated beginner calibration, and a possible capture is not automatically a blunder.
 
 - [Product vision](docs/PRODUCT_VISION.md)

@@ -1,5 +1,7 @@
 # Marcus deployment runbook
 
+For the current configuration, verification and proposed D1 procedure, see [Phase D0 deployment readiness](PHASE_D0_DEPLOYMENT_READINESS.md). The Phase 2C record below is historical; D0 confirms authenticated deployment-listing access is now working and the existing Vercel project has no Git repository linked. Deployment remains unauthorized and blocked by the recorded distribution/licensing gate.
+
 ## Current release status
 
 **BLOCKED BEFORE PUSH / PREVIEW CREATION.** This is deployment preparation, not a successful Vercel release. See [the verification record](DEPLOYMENT_VERIFICATION.md) for executed checks and outstanding gates.
